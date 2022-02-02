@@ -78,7 +78,7 @@ class SmokingHistoryApp(MDApp):
         self.screen.add_widget(self.table)
 
         self.store = JsonStore(f"{path}/db_trackdhum.json") ### DEPLOYMENT MANDATE
-#        self.store = JsonStore('t.json') ### TESTING ON PC
+#        self.store = JsonStore('db_trackdhum.json') ### TESTING ON PC
 
         for key in self.store.keys():
             date = self.store.get(str(key))['date']
@@ -120,7 +120,7 @@ class SmokingHistoryApp(MDApp):
             pos_hint={'center_y': 0.105},
             theme_text_color='Custom',
             text_color=(1,1,0,1),
-            font_style='H6'
+            font_style='Subtitle1'
         )
         self.screen.add_widget(self.lbl_total)
 
@@ -162,7 +162,7 @@ class SmokingHistoryApp(MDApp):
         self.dialog_faq = MDDialog(
             title = 'Message to the Users',
             text = "It's the Beta/Trial version of Track Dhum. There is no noble objective except to help myself and my friends with this app!" + "\n\n" + "At the time of smoking, open the app and enter the price of your smoke; press the 'Smoking One' button. That's all! The app will keep a record of your smoking." + "\n\n" + "In this version, you can see some basic and important statistics of your smoking habit. In the upcoming versions, I am coming up with some more interesting and useful statistical models.",
-            radius=[20, 7, 20, 7],
+            radius=[40, 7, 40, 7],
             buttons = [
                 MDFlatButton(
                     text = 'OK',
@@ -185,6 +185,7 @@ class SmokingHistoryApp(MDApp):
             self.dialog = MDDialog(
                 title = 'Warning',
                 text = 'You have to insert cost to record your smoking!',
+                radius = [40, 7, 40, 7],
                 buttons = [
                     MDFlatButton(
                         text = 'OK',
@@ -199,6 +200,7 @@ class SmokingHistoryApp(MDApp):
             self.dialog = MDDialog(
                 title = 'Successful',
                 text = 'Your smoking record has been added in the database!',
+                radius = [40, 7, 40, 7],
                 buttons = [
                     MDFlatButton(
                         text = 'OK',
