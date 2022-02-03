@@ -41,6 +41,7 @@ class SmokingHistoryApp(MDApp):
         self.theme_cls.theme_style = 'Dark'
 
         self.screen = Screen()
+
         self.toolbar = MDToolbar(title="Track Dhoom!")
         self.toolbar.right_action_items = [['information-outline', lambda x: self.faq()]]
         self.toolbar.pos_hint = {"top": 1}
@@ -65,8 +66,10 @@ class SmokingHistoryApp(MDApp):
         self.screen.add_widget(btn_smoked)
 
         self.table = MDDataTable(
-            rows_num = 10,
+            rows_num = 6,
             use_pagination = True,
+            pagination_menu_pos = 'auto',
+            pagination_menu_height = '240dp',
             pos_hint = {'center_x': 0.5, 'center_y': 0.52},
             size_hint = (1, 0.6),
             column_data = [
