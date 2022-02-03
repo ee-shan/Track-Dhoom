@@ -48,12 +48,11 @@ class SmokingHistoryApp(MDApp):
         self.screen.add_widget(self.toolbar)
 
         self.tf_cost = MDTextField(
-            pos_hint = {'center_x': 0.5, 'center_y': 0.83},
+            pos_hint = {'center_x': 0.5, 'center_y': 0.85},
             hint_text = 'Cost',
             helper_text = 'price of your smoke',
             helper_text_mode = 'on_focus',
-            size_hint_x = None,
-            width = 150
+            size_hint = (0.9, 1)
         )
         self.screen.add_widget(self.tf_cost)
 
@@ -61,7 +60,7 @@ class SmokingHistoryApp(MDApp):
             text='Smoking One!',
             icon='smoking-pipe',
             on_release=self.db_create,
-            pos_hint={'center_x': 0.5, 'center_y': 0.73},
+            pos_hint={'center_x': 0.5, 'center_y': 0.77},
             md_bg_color=[1,1,0,1],
             font_size="18sp"
         )
@@ -70,7 +69,7 @@ class SmokingHistoryApp(MDApp):
         self.lbl_total = MDLabel(
             text='YOUR SMOKING HISTORY SHOWS HERE!',
             halign='center',
-            pos_hint={'center_y': 0.63},
+            pos_hint={'center_y': 0.67},
             theme_text_color='Custom',
             text_color=(1,1,0,1),
             font_style='H6'
@@ -80,58 +79,59 @@ class SmokingHistoryApp(MDApp):
         btn_weekly_total = MDRoundFlatButton(
             text='Weekly Total',
             on_release=self.weekly_total_count,
-            pos_hint={'center_x': 0.3, 'center_y': 0.51},
+            pos_hint={'center_x': 0.3, 'center_y': 0.57},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
         self.screen.add_widget(btn_weekly_total)
 
-        btn_total_spent = MDRoundFlatButton(
-            text='Total Spent',
-            on_release=self.total_spent,
-            pos_hint={'center_x': 0.7, 'center_y': 0.51},
-            size_hint_x=None,
-            width=150,
-            font_size='16sp'
-        )
-        self.screen.add_widget(btn_total_spent)
-
-        btn_total = MDRoundFlatButton(
-            text='Total Smoked',
-            on_release=self.total_count,
-            pos_hint={'center_x': 0.3, 'center_y': 0.43},
-            size_hint_x=None,
-            width=150,
-            font_size='16sp'
-        )
-        self.screen.add_widget(btn_total)
-
-        btn_monthly_total = MDRoundFlatButton(
-            text='Monthly Total',
-            on_release=self.monthly_count,
-            pos_hint={'center_x': 0.7, 'center_y': 0.43},
-            size_hint_x=None,
-            width=150,
-            font_size='16sp'
-        )
-        self.screen.add_widget(btn_monthly_total)
-
         btn_monthly_cost = MDRoundFlatButton(
             text='Monthly Spent',
             on_release=self.monthly_spent,
-            pos_hint={'center_x': 0.3, 'center_y': 0.35},
+            pos_hint={'center_x': 0.7, 'center_y': 0.57},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
         self.screen.add_widget(btn_monthly_cost)
 
+        btn_total_spent = MDRoundFlatButton(
+            text='Total Spent',
+            on_release=self.total_spent,
+            pos_hint={'center_x': 0.3, 'center_y': 0.51},
+            size_hint_x=None,
+            width=150,
+            font_size='16sp'
+        )
+        self.screen.add_widget(btn_total_spent)
+
+        btn_monthly_total = MDRoundFlatButton(
+            text='Monthly Total',
+            on_release=self.monthly_count,
+            pos_hint={'center_x': 0.7, 'center_y': 0.51},
+            size_hint_x=None,
+            width=150,
+            font_size='16sp'
+        )
+        self.screen.add_widget(btn_monthly_total)
+
+        btn_total = MDRoundFlatButton(
+            text='Total Smoked',
+            on_release=self.total_count,
+            pos_hint={'center_x': 0.3, 'center_y': 0.45},
+            size_hint_x=None,
+            width=150,
+            font_size='16sp'
+        )
+        self.screen.add_widget(btn_total)
+
         btn_exit = MDFillRoundFlatIconButton(
-            text='Exit',
-            icon='window-close',
+            text='Exit App',
+            icon='close-circle-outline',
             on_release=self.close_app,
-            pos_hint={'center_x': 0.7, 'center_y': 0.35},
+            pos_hint={'center_x': 0.7, 'center_y': 0.45},
+            md_bg_color=[1,1,0,1],
             size_hint_x=None,
             width=150,
             font_size='16sp'
@@ -139,12 +139,12 @@ class SmokingHistoryApp(MDApp):
         self.screen.add_widget(btn_exit)
 
         self.table = MDDataTable(
-            rows_num = 2,
+            rows_num = 3,
             use_pagination = True,
             pagination_menu_pos = 'auto',
             pagination_menu_height = '240dp',
             pos_hint = {'center_x': 0.5},
-            size_hint = (1, 0.3),
+            size_hint = (1, 0.4),
             column_data = [
                 ('Date', dp(30)),
                 ('Time', dp(30)),
