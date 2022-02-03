@@ -8,7 +8,7 @@ from kivymd.uix.screen import Screen
 from kivymd.uix.toolbar import MDToolbar
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
-from kivymd.uix.button import MDRoundFlatButton, MDRoundFlatIconButton, MDFlatButton
+from kivymd.uix.button import MDRoundFlatButton, MDRoundFlatIconButton, MDFlatButton, MDFillRoundFlatIconButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
@@ -48,7 +48,7 @@ class SmokingHistoryApp(MDApp):
         self.screen.add_widget(self.toolbar)
 
         self.tf_cost = MDTextField(
-            pos_hint = {'center_x': 0.25, 'center_y': 0.86},
+            pos_hint = {'center_x': 0.5, 'center_y': 0.8},
             hint_text = 'Cost',
             helper_text = 'price of your smoke',
             helper_text_mode = 'on_focus',
@@ -57,109 +57,99 @@ class SmokingHistoryApp(MDApp):
         )
         self.screen.add_widget(self.tf_cost)
 
-        btn_smoked = MDRoundFlatIconButton(
+        btn_smoked = MDFillRoundFlatIconButton(
             text='Smoking One!',
             icon='smoking-pipe',
             on_release=self.db_create,
-            pos_hint={'center_x': 0.7, 'center_y': 0.86}
+            pos_hint={'center_x': 0.5, 'center_y': 0.7},
+            md_bg_color=[1,1,0,1],
+            font_size="18sp"
         )
         self.screen.add_widget(btn_smoked)
 
-        self.table = MDDataTable(
-            rows_num = 6,
-            use_pagination = True,
-            pagination_menu_pos = 'auto',
-            pagination_menu_height = '240dp',
-            pos_hint = {'center_x': 0.5, 'center_y': 0.52},
-            size_hint = (1, 0.6),
-            column_data = [
-                ('Date', dp(30)),
-                ('Time', dp(30)),
-                ('Cost', dp(30))
-            ]
+        self.lbl_total = MDLabel(
+            text='YOUR SMOKING HISTORY SHOWS HERE!',
+            halign='center',
+            pos_hint={'center_y': 0.6},
+            theme_text_color='Custom',
+            text_color=(1,1,0,1),
+            font_style='H6'
         )
-        self.screen.add_widget(self.table)
-
-        self.store = JsonStore(f"{path}/db_trackdhoom.json") ### DEPLOYMENT MANDATE
-#        self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
-
-        for key in self.store.keys():
-            date = self.store.get(str(key))['date']
-            time = self.store.get(str(key))['time']
-            cost = self.store.get(str(key))['cost']
-
-            self.table.row_data.insert(len(self.table.row_data), (date, time, cost))
+        self.screen.add_widget(self.lbl_total)
 
         btn_weekly_total = MDRoundFlatButton(
             text='Weekly Total',
             on_release=self.weekly_total_count,
-            pos_hint={'center_x': 0.2, 'center_y': 0.17},
+            pos_hint={'center_x': 0.3, 'center_y': 0.5},
             size_hint_x=None,
-            width=150
+            width=150,
+            font_size='16sp'
         )
         self.screen.add_widget(btn_weekly_total)
 
         btn_total_spent = MDRoundFlatButton(
             text='Total Spent',
             on_release=self.total_spent,
-            pos_hint={'center_x': 0.5, 'center_y': 0.17},
+            pos_hint={'center_x': 0.7, 'center_y': 0.5},
             size_hint_x=None,
-            width=150
+            width=150,
+            font_size='16sp'
         )
         self.screen.add_widget(btn_total_spent)
 
         btn_total = MDRoundFlatButton(
             text='Total Smoked',
             on_release=self.total_count,
-            pos_hint={'center_x': 0.8, 'center_y': 0.17},
+            pos_hint={'center_x': 0.3, 'center_y': 0.4},
             size_hint_x=None,
-            width=150
+            width=150,
+            font_size='16sp'
         )
         self.screen.add_widget(btn_total)
-
-        self.lbl_total = MDLabel(
-            text='YOUR SMOKING HISTORY SHOWS HERE!',
-            halign='center',
-            pos_hint={'center_y': 0.105},
-            theme_text_color='Custom',
-            text_color=(1,1,0,1),
-            font_style='Subtitle1'
-        )
-        self.screen.add_widget(self.lbl_total)
 
         btn_monthly_total = MDRoundFlatButton(
             text='Monthly Total',
             on_release=self.monthly_count,
-            pos_hint={'center_x': 0.2, 'center_y': 0.04},
+            pos_hint={'center_x': 0.7, 'center_y': 0.4},
             size_hint_x=None,
-            width=150
+            width=150,
+            font_size='16sp'
         )
         self.screen.add_widget(btn_monthly_total)
 
         btn_monthly_cost = MDRoundFlatButton(
             text='Monthly Spent',
             on_release=self.monthly_spent,
-            pos_hint={'center_x': 0.5, 'center_y': 0.04},
+            pos_hint={'center_x': 0.3, 'center_y': 0.3},
             size_hint_x=None,
-            width=150
+            width=150,
+            font_size='16sp'
         )
         self.screen.add_widget(btn_monthly_cost)
 
-        btn_exit = MDRoundFlatIconButton(
+        btn_exit = MDFillRoundFlatIconButton(
             text='Exit',
             icon='window-close',
             on_release=self.close_app,
-            pos_hint={'center_x': 0.8, 'center_y': 0.04},
+            pos_hint={'center_x': 0.7, 'center_y': 0.3},
             size_hint_x=None,
-            width=150
+            width=150,
+            font_size='16sp'
         )
         self.screen.add_widget(btn_exit)
 
         return self.screen
 
-    ### DEPLOYMENT MANDATES
     def on_start(self):
-        request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
+        request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE]) ### DEPLOYMENT MANDATE
+        self.store = JsonStore(f"{path}/db_trackdhoom.json") ### DEPLOYMENT MANDATE
+#        self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
+
+        count = 0
+        for key in self.store.keys():
+            if self.store.get(str(key))['date'] == datetime.now().strftime('%d/%m/%Y'):
+                count += 1
+        self.lbl_total.text = "YOU'VE ALREADY SMOKED " + str(count) + ' STICK(S) TODAY'
 
     def faq(self):
         self.dialog_faq = MDDialog(
@@ -231,7 +221,12 @@ class SmokingHistoryApp(MDApp):
                 cost = cost
             )
 
-            self.table.row_data.insert(len(self.table.row_data), (current_date, current_time, cost))
+            count = 0
+            for key in self.store.keys():
+                if self.store.get(str(key))['date'] == datetime.now().strftime('%d/%m/%Y'):
+                    count += 1
+            self.lbl_total.text = "YOU'VE ALREADY SMOKED " + str(count) + ' STICK(S) TODAY'
+            #self.table.row_data.insert(len(self.table.row_data), (current_date, current_time, cost))
 
     def close_dialog(self, args):
         self.dialog.dismiss()
