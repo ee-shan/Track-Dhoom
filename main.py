@@ -48,7 +48,7 @@ class SmokingHistoryApp(MDApp):
         self.screen.add_widget(self.toolbar)
 
         self.tf_cost = MDTextField(
-            pos_hint = {'center_x': 0.5, 'center_y': 0.8},
+            pos_hint = {'center_x': 0.5, 'center_y': 0.83},
             hint_text = 'Cost',
             helper_text = 'price of your smoke',
             helper_text_mode = 'on_focus',
@@ -61,7 +61,7 @@ class SmokingHistoryApp(MDApp):
             text='Smoking One!',
             icon='smoking-pipe',
             on_release=self.db_create,
-            pos_hint={'center_x': 0.5, 'center_y': 0.7},
+            pos_hint={'center_x': 0.5, 'center_y': 0.73},
             md_bg_color=[1,1,0,1],
             font_size="18sp"
         )
@@ -70,7 +70,7 @@ class SmokingHistoryApp(MDApp):
         self.lbl_total = MDLabel(
             text='YOUR SMOKING HISTORY SHOWS HERE!',
             halign='center',
-            pos_hint={'center_y': 0.6},
+            pos_hint={'center_y': 0.63},
             theme_text_color='Custom',
             text_color=(1,1,0,1),
             font_style='H6'
@@ -80,7 +80,7 @@ class SmokingHistoryApp(MDApp):
         btn_weekly_total = MDRoundFlatButton(
             text='Weekly Total',
             on_release=self.weekly_total_count,
-            pos_hint={'center_x': 0.3, 'center_y': 0.5},
+            pos_hint={'center_x': 0.3, 'center_y': 0.51},
             size_hint_x=None,
             width=150,
             font_size='16sp'
@@ -90,7 +90,7 @@ class SmokingHistoryApp(MDApp):
         btn_total_spent = MDRoundFlatButton(
             text='Total Spent',
             on_release=self.total_spent,
-            pos_hint={'center_x': 0.7, 'center_y': 0.5},
+            pos_hint={'center_x': 0.7, 'center_y': 0.51},
             size_hint_x=None,
             width=150,
             font_size='16sp'
@@ -100,7 +100,7 @@ class SmokingHistoryApp(MDApp):
         btn_total = MDRoundFlatButton(
             text='Total Smoked',
             on_release=self.total_count,
-            pos_hint={'center_x': 0.3, 'center_y': 0.4},
+            pos_hint={'center_x': 0.3, 'center_y': 0.43},
             size_hint_x=None,
             width=150,
             font_size='16sp'
@@ -110,7 +110,7 @@ class SmokingHistoryApp(MDApp):
         btn_monthly_total = MDRoundFlatButton(
             text='Monthly Total',
             on_release=self.monthly_count,
-            pos_hint={'center_x': 0.7, 'center_y': 0.4},
+            pos_hint={'center_x': 0.7, 'center_y': 0.43},
             size_hint_x=None,
             width=150,
             font_size='16sp'
@@ -120,7 +120,7 @@ class SmokingHistoryApp(MDApp):
         btn_monthly_cost = MDRoundFlatButton(
             text='Monthly Spent',
             on_release=self.monthly_spent,
-            pos_hint={'center_x': 0.3, 'center_y': 0.3},
+            pos_hint={'center_x': 0.3, 'center_y': 0.35},
             size_hint_x=None,
             width=150,
             font_size='16sp'
@@ -131,12 +131,27 @@ class SmokingHistoryApp(MDApp):
             text='Exit',
             icon='window-close',
             on_release=self.close_app,
-            pos_hint={'center_x': 0.7, 'center_y': 0.3},
+            pos_hint={'center_x': 0.7, 'center_y': 0.35},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
         self.screen.add_widget(btn_exit)
+
+        self.table = MDDataTable(
+            rows_num = 2,
+            use_pagination = True,
+            pagination_menu_pos = 'auto',
+            pagination_menu_height = '240dp',
+            pos_hint = {'center_x': 0.5},
+            size_hint = (1, 0.3),
+            column_data = [
+                ('Date', dp(30)),
+                ('Time', dp(30)),
+                ('Cost', dp(30))
+            ]
+        )
+        self.screen.add_widget(self.table)
 
         return self.screen
 
@@ -150,6 +165,13 @@ class SmokingHistoryApp(MDApp):
             if self.store.get(str(key))['date'] == datetime.now().strftime('%d/%m/%Y'):
                 count += 1
         self.lbl_total.text = "YOU'VE ALREADY SMOKED " + str(count) + ' STICK(S) TODAY'
+
+        for key in self.store.keys():
+            date = self.store.get(str(key))['date']
+            time = self.store.get(str(key))['time']
+            cost = self.store.get(str(key))['cost']
+
+            self.table.row_data.insert(len(self.table.row_data), (date, time, cost))
 
     def faq(self):
         self.dialog_faq = MDDialog(
@@ -226,7 +248,8 @@ class SmokingHistoryApp(MDApp):
                 if self.store.get(str(key))['date'] == datetime.now().strftime('%d/%m/%Y'):
                     count += 1
             self.lbl_total.text = "YOU'VE ALREADY SMOKED " + str(count) + ' STICK(S) TODAY'
-            #self.table.row_data.insert(len(self.table.row_data), (current_date, current_time, cost))
+            
+            self.table.row_data.insert(len(self.table.row_data), (current_date, current_time, cost))
 
     def close_dialog(self, args):
         self.dialog.dismiss()
