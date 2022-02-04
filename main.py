@@ -18,32 +18,72 @@ from kivy.storage.jsonstore import JsonStore
 from datetime import datetime, timedelta
 
 ### CHECKING ON SMARTPHONE SIZE SCREEN
-#Window.size = (400, 700)
+Window.size = (400, 700)
 
 ### DEPLOYMENT MANDATES
 
-from android.permissions import request_permissions, Permission
+# from android.permissions import request_permissions, Permission
 
-from jnius import autoclass
+# from jnius import autoclass
 
-try:
-    Environment = autoclass('android.os.Environment')
-    path = Environment.getExternalStorageDirectory().getAbsolutePath()
-except:
-    path = MDApp.get_running_app().user_data_dir
+# try:
+#     Environment = autoclass('android.os.Environment')
+#     path = Environment.getExternalStorageDirectory().getAbsolutePath()
+# except:
+#     path = MDApp.get_running_app().user_data_dir
 
 ### DEPLOYMENT MANDATES
 
 class SmokingHistoryApp(MDApp):
+    def flip(self):
+        if self.theme_state == 1:
+            self.theme_state = 2
+            
+            self.theme_cls.primary_palette = 'Blue'
+            self.theme_cls.primary_hue = 'A700'
+            self.theme_cls.theme_style = 'Light'
+        elif self.theme_state == 2:
+            self.theme_state = 1
+
+            self.theme_cls.primary_palette = 'Yellow'
+            self.theme_cls.primary_hue = 'A700'
+            self.theme_cls.theme_style = 'Dark'
+
     def build(self):
         self.theme_cls.primary_palette = 'Yellow'
         self.theme_cls.primary_hue = 'A700'
         self.theme_cls.theme_style = 'Dark'
 
+        self.state = 1
+        self.theme_state = 1
+
         self.screen = Screen()
 
+        self.btn_list = MDFillRoundFlatIconButton(
+            text = 'View History',
+            icon = 'table-eye',
+            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
+            on_release = self.view_full_list
+        )
+        self.screen.add_widget(self.btn_list)
+
+        self.btn_home = MDFillRoundFlatIconButton(
+            text = 'Back Home',
+            icon = 'home-roof',
+            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
+            on_release = self.back_to_home
+        )
+
+        self.btn_about = MDFillRoundFlatIconButton(
+            text = 'About the App',
+            icon = 'information',
+            pos_hint = {'center_x': 0.7, 'center_y': 0.05},
+            on_release = self.about_page
+        )
+        self.screen.add_widget(self.btn_about)
+
         self.toolbar = MDToolbar(title="Track Dhoom!")
-        self.toolbar.right_action_items = [['information-outline', lambda x: self.faq()]]
+        self.toolbar.right_action_items = [['rotate-3d-variant', lambda x: self.flip()]]
         self.toolbar.pos_hint = {"top": 1}
         self.screen.add_widget(self.toolbar)
 
@@ -52,11 +92,11 @@ class SmokingHistoryApp(MDApp):
             hint_text = 'Cost',
             helper_text = 'price of your smoke',
             helper_text_mode = 'on_focus',
-            size_hint = (0.9, 1)
+            size_hint = (0.8, 1)
         )
         self.screen.add_widget(self.tf_cost)
 
-        btn_smoked = MDFillRoundFlatIconButton(
+        self.btn_smoked = MDFillRoundFlatIconButton(
             text='Smoking One!',
             icon='smoking-pipe',
             on_release=self.db_create,
@@ -64,69 +104,73 @@ class SmokingHistoryApp(MDApp):
             md_bg_color=[1,1,0,1],
             font_size="18sp"
         )
-        self.screen.add_widget(btn_smoked)
+        self.screen.add_widget(self.btn_smoked)
 
         self.lbl_total = MDLabel(
             text='YOUR SMOKING HISTORY SHOWS HERE!',
             halign='center',
             pos_hint={'center_y': 0.67},
-            theme_text_color='Custom',
-            text_color=(1,1,0,1),
+            theme_text_color='Primary',
             font_style='H6'
         )
         self.screen.add_widget(self.lbl_total)
 
-        btn_weekly_total = MDRoundFlatButton(
+        self.btn_weekly_total = MDRoundFlatIconButton(
             text='Weekly Total',
+            icon='calendar-weekend-outline',
             on_release=self.weekly_total_count,
             pos_hint={'center_x': 0.3, 'center_y': 0.57},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_weekly_total)
+        self.screen.add_widget(self.btn_weekly_total)
 
-        btn_monthly_cost = MDRoundFlatButton(
+        self.btn_monthly_cost = MDRoundFlatIconButton(
             text='Monthly Spent',
+            icon='wallet-outline',
             on_release=self.monthly_spent,
             pos_hint={'center_x': 0.7, 'center_y': 0.57},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_monthly_cost)
+        self.screen.add_widget(self.btn_monthly_cost)
 
-        btn_total_spent = MDRoundFlatButton(
+        self.btn_total_spent = MDRoundFlatIconButton(
             text='Total Spent',
+            icon='wallet',
             on_release=self.total_spent,
             pos_hint={'center_x': 0.3, 'center_y': 0.51},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_total_spent)
+        self.screen.add_widget(self.btn_total_spent)
 
-        btn_monthly_total = MDRoundFlatButton(
+        self.btn_monthly_total = MDRoundFlatIconButton(
             text='Monthly Total',
+            icon='calendar-month-outline',
             on_release=self.monthly_count,
             pos_hint={'center_x': 0.7, 'center_y': 0.51},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_monthly_total)
+        self.screen.add_widget(self.btn_monthly_total)
 
-        btn_total = MDRoundFlatButton(
+        self.btn_total = MDRoundFlatIconButton(
             text='Total Smoked',
+            icon='calendar-check',
             on_release=self.total_count,
             pos_hint={'center_x': 0.3, 'center_y': 0.45},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_total)
+        self.screen.add_widget(self.btn_total)
 
-        btn_exit = MDFillRoundFlatIconButton(
+        self.btn_exit = MDFillRoundFlatIconButton(
             text='Exit App',
             icon='close-circle-outline',
             on_release=self.close_app,
@@ -136,29 +180,97 @@ class SmokingHistoryApp(MDApp):
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_exit)
+        self.screen.add_widget(self.btn_exit)
 
         self.table = MDDataTable(
-            rows_num = 3,
+            rows_num = 10,
             use_pagination = True,
             pagination_menu_pos = 'auto',
             pagination_menu_height = '240dp',
-            pos_hint = {'center_x': 0.5},
-            size_hint = (1, 0.4),
+            pos_hint = {'center_x': 0.5, 'center_y': 0.5},
+            size_hint = (1, 0.75),
             column_data = [
                 ('Date', dp(30)),
                 ('Time', dp(30)),
                 ('Cost', dp(30))
             ]
         )
-        self.screen.add_widget(self.table)
+
+        self.lbl_about = MDLabel(
+            text = "It's the Beta/Trial version of Track Dhoom. There is no noble objective except to help myself and my friends with this app!" + "\n\n" + "At the time of smoking, open the app and enter the price of your smoke; press the 'Smoking One' button. That's all! The app will keep a record of your smoking." + "\n\n" + "In this version, you can see some basic and important statistics of your smoking habit. In the upcoming versions, I am coming up with some more interesting and useful statistical models.",
+            pos_hint = {'center_x': 0.5, 'center_y': 0.5},
+            size_hint_x = 0.8
+        )
 
         return self.screen
 
+    def view_full_list(self, args):
+        self.state = 2
+
+        self.screen.remove_widget(self.tf_cost)
+        self.screen.remove_widget(self.btn_smoked)
+        self.screen.remove_widget(self.lbl_total)
+        self.screen.remove_widget(self.btn_weekly_total)
+        self.screen.remove_widget(self.btn_monthly_cost)
+        self.screen.remove_widget(self.btn_total_spent)
+        self.screen.remove_widget(self.btn_monthly_total)
+        self.screen.remove_widget(self.btn_total)
+        self.screen.remove_widget(self.btn_exit)
+        self.screen.remove_widget(self.btn_list)
+        self.screen.remove_widget(self.lbl_about)
+        self.screen.remove_widget(self.btn_about)
+
+        self.screen.add_widget(self.table)
+        self.screen.add_widget(self.btn_home)
+        self.screen.add_widget(self.btn_about)
+
+    def back_to_home(self, args):
+        self.state = 1
+
+        self.screen.remove_widget(self.table)
+        self.screen.remove_widget(self.btn_home)
+        self.screen.remove_widget(self.lbl_about)
+        self.screen.remove_widget(self.btn_about)
+
+        self.screen.add_widget(self.tf_cost)
+        self.screen.add_widget(self.btn_smoked)
+        self.screen.add_widget(self.lbl_total)
+        self.screen.add_widget(self.btn_weekly_total)
+        self.screen.add_widget(self.btn_monthly_cost)
+        self.screen.add_widget(self.btn_total_spent)
+        self.screen.add_widget(self.btn_monthly_total)
+        self.screen.add_widget(self.btn_total)
+        self.screen.add_widget(self.btn_exit)
+        self.screen.add_widget(self.btn_list)
+        self.screen.add_widget(self.btn_about)
+
+    def about_page(self, args):
+        if self.state == 1:
+            self.screen.remove_widget(self.tf_cost)
+            self.screen.remove_widget(self.btn_smoked)
+            self.screen.remove_widget(self.lbl_total)
+            self.screen.remove_widget(self.btn_weekly_total)
+            self.screen.remove_widget(self.btn_monthly_cost)
+            self.screen.remove_widget(self.btn_total_spent)
+            self.screen.remove_widget(self.btn_monthly_total)
+            self.screen.remove_widget(self.btn_total)
+            self.screen.remove_widget(self.btn_exit)
+            self.screen.remove_widget(self.btn_list)
+
+            self.screen.add_widget(self.btn_home)
+        elif self.state == 2:
+            self.screen.remove_widget(self.table)
+            self.screen.remove_widget(self.btn_home)
+            
+            self.screen.add_widget(self.btn_list)
+
+        self.screen.remove_widget(self.btn_about)
+        self.screen.add_widget(self.lbl_about)
+
     def on_start(self):
-        request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE]) ### DEPLOYMENT MANDATE
-        self.store = JsonStore(f"{path}/db_trackdhoom.json") ### DEPLOYMENT MANDATE
-#        self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
+#        request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE]) ### DEPLOYMENT MANDATE
+#        self.store = JsonStore(f"{path}/db_trackdhoom.json") ### DEPLOYMENT MANDATE
+        self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
 
         count = 0
         for key in self.store.keys():
