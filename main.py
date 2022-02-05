@@ -283,7 +283,7 @@ class SmokingHistoryApp(MDApp):
     def on_start(self):
         request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE]) ### DEPLOYMENT MANDATE
         self.store = JsonStore(f"{path}/db_trackdhoom.json") ### DEPLOYMENT MANDATE
-#        self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
+        #self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
 
         count = 0
         for key in self.store.keys():
