@@ -21,19 +21,19 @@ import webbrowser
 from datetime import datetime, timedelta
 
 ### CHECKING ON SMARTPHONE SIZE SCREEN
-Window.size = (400, 700)
+#Window.size = (400, 700)
 
 ### DEPLOYMENT MANDATES
 
-# from android.permissions import request_permissions, Permission
+from android.permissions import request_permissions, Permission
 
-# from jnius import autoclass
+from jnius import autoclass
 
-# try:
-#     Environment = autoclass('android.os.Environment')
-#     path = Environment.getExternalStorageDirectory().getAbsolutePath()
-# except:
-#     path = MDApp.get_running_app().user_data_dir
+try:
+    Environment = autoclass('android.os.Environment')
+    path = Environment.getExternalStorageDirectory().getAbsolutePath()
+except:
+    path = MDApp.get_running_app().user_data_dir
 
 ### DEPLOYMENT MANDATES
 
@@ -60,7 +60,7 @@ class SmokingHistoryApp(MDApp):
 
         self.btn_home = MDRectangleFlatIconButton(
             text = 'Home',
-            icon = 'home-roof',
+            icon = 'home',
             font_size = '17sp',
             pos_hint = {'center_x': 0.3, 'center_y': 0.05},
             line_color = [0, 0, 0, 0],
@@ -202,7 +202,7 @@ class SmokingHistoryApp(MDApp):
     def view_full_list(self, args):
         if self.state == 3:
             self.screen.remove_widget(self.btn_github)
-            
+
         self.state = 2
 
         self.screen.remove_widget(self.tf_cost)
@@ -281,9 +281,9 @@ class SmokingHistoryApp(MDApp):
         self.screen.add_widget(self.lbl_about)
 
     def on_start(self):
-#        request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE]) ### DEPLOYMENT MANDATE
-#        self.store = JsonStore(f"{path}/db_trackdhoom.json") ### DEPLOYMENT MANDATE
-        self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
+        request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE]) ### DEPLOYMENT MANDATE
+        self.store = JsonStore(f"{path}/db_trackdhoom.json") ### DEPLOYMENT MANDATE
+#        self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
 
         count = 0
         for key in self.store.keys():
