@@ -82,6 +82,32 @@ class SmokingHistoryApp(MDApp):
         self.toolbar.pos_hint = {"top": 1}
         self.screen.add_widget(self.toolbar)
 
+        self.btn_list = MDRectangleFlatIconButton(
+            text = 'History',
+            icon = 'table-eye',
+            font_size = '17sp',
+            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
+            line_color = [0, 0, 0, 0]
+        )
+        self.screen.add_widget(self.btn_list)
+
+        self.btn_home = MDRectangleFlatIconButton(
+            text = 'Home',
+            icon = 'home',
+            font_size = '17sp',
+            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
+            line_color = [0, 0, 0, 0],
+        )
+
+        self.btn_about = MDRectangleFlatIconButton(
+            text = 'About',
+            icon = 'information-outline',
+            font_size = '17sp',
+            pos_hint = {'center_x': 0.7, 'center_y': 0.05},
+            line_color = [0, 0, 0, 0]
+        )
+        self.screen.add_widget(self.btn_about)
+
         self.tf_cost = MDTextField(
             pos_hint = {'center_x': 0.5, 'center_y': 0.85},
             hint_text = 'Cost',
