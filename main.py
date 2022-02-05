@@ -17,6 +17,8 @@ from kivy.storage.jsonstore import JsonStore
 
 from datetime import datetime, timedelta
 
+import webbrowser
+
 ### CHECKING ON SMARTPHONE SIZE SCREEN
 #Window.size = (400, 700)
 
@@ -79,11 +81,11 @@ class SmokingHistoryApp(MDApp):
         self.screen.add_widget(self.btn_about)
 
         self.tf_cost = MDTextField(
-            pos_hint = {'center_x': 0.5, 'center_y': 0.85},
+            pos_hint = {'center_x': 0.5, 'center_y': 0.83},
             hint_text = 'Cost',
             helper_text = 'price of your smoke',
             helper_text_mode = 'on_focus',
-            size_hint = (0.9, 1)
+            size_hint = (0.7, 1)
         )
         self.screen.add_widget(self.tf_cost)
 
@@ -91,7 +93,7 @@ class SmokingHistoryApp(MDApp):
             text='Smoking One!',
             icon='smoking-pipe',
             on_release=self.db_create,
-            pos_hint={'center_x': 0.5, 'center_y': 0.77},
+            pos_hint={'center_x': 0.5, 'center_y': 0.75},
             md_bg_color=[1,1,0,1],
             font_size="18sp"
         )
@@ -175,12 +177,12 @@ class SmokingHistoryApp(MDApp):
         self.screen.add_widget(self.btn_total)
 
         self.table = MDDataTable(
-            rows_num = 3,
+            rows_num = 10,
             use_pagination = True,
             pagination_menu_pos = 'auto',
             pagination_menu_height = '240dp',
-            pos_hint = {'center_x': 0.5},
-            size_hint = (1, 0.4),
+            pos_hint = {'center_x': 0.5, 'center_y': 0.5},
+            size_hint = (1, 0.75),
             column_data = [
                 ('Date', dp(30)),
                 ('Time', dp(30)),
@@ -194,6 +196,14 @@ class SmokingHistoryApp(MDApp):
             pos_hint = {'center_x': 0.5, 'center_y': 0.5},
             size_hint_x = 0.8
         )
+
+        self.btn_github = MDFlatButton(
+            text = 'Open GitHub Repository',
+            font_style = 'H6',
+            theme_text_color = 'Primary',
+            pos_hint = {'center_x': 0.5, 'center_y': 0.25}
+        )
+        self.btn_github.bind(on_press=lambda x: webbrowser.open('https://github.com/ee-shan/Track-Dhoom'))
 
         return self.screen
 
@@ -280,6 +290,7 @@ class SmokingHistoryApp(MDApp):
             self.state = 1
 
             self.screen.remove_widget(self.lbl_about)
+            self.screen.remove_widget(self.btn_github) # remove github link
             self.screen.remove_widget(self.btn_home)
 
             
@@ -287,6 +298,7 @@ class SmokingHistoryApp(MDApp):
         elif self.state == 2:
             self.state = 1
 
+            self.screen.remove_widget(self.table) # remove table
             self.screen.remove_widget(self.btn_home)
             self.screen.remove_widget(self.btn_about)
         
@@ -323,8 +335,10 @@ class SmokingHistoryApp(MDApp):
             self.state = 2
 
             self.screen.remove_widget(self.lbl_about)
+            self.screen.remove_widget(self.btn_github) # remove github link
             self.screen.remove_widget(self.btn_list)
 
+        self.screen.add_widget(self.table) # show table
         self.screen.add_widget(self.btn_home)
         self.screen.add_widget(self.btn_about)
 
@@ -350,12 +364,14 @@ class SmokingHistoryApp(MDApp):
         elif self.state == 2:
             self.state = 3
 
+            self.screen.remove_widget(self.table) # remove table
             self.screen.remove_widget(self.btn_home)
             self.screen.remove_widget(self.btn_about)
 
             self.screen.add_widget(self.btn_list)
 
         self.screen.add_widget(self.lbl_about)
+        self.screen.add_widget(self.btn_github) # github link
 
     def total_count(self, args):
         self.lbl_total.text = 'OVERALL SMOKING COUNT:' + '\n' + str(len(self.store.keys())) + ' STICK(S)'
