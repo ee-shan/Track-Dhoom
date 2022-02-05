@@ -42,6 +42,8 @@ class SmokingHistoryApp(MDApp):
 
         self.screen = Screen()
 
+        self.state = 1
+
         self.toolbar = MDToolbar(title="Track Dhoom!")
         self.toolbar.right_action_items = [['exit-to-app', lambda x: MDApp.get_running_app().stop()]]
         self.toolbar.pos_hint = {"top": 1}
@@ -67,6 +69,7 @@ class SmokingHistoryApp(MDApp):
         self.btn_about = MDRectangleFlatIconButton(
             text = 'About',
             icon = 'information-outline',
+            on_release = self.about_page,
             font_size = '17sp',
             pos_hint = {'center_x': 0.7, 'center_y': 0.05},
             line_color = [0, 0, 0, 0]
@@ -82,7 +85,7 @@ class SmokingHistoryApp(MDApp):
         )
         self.screen.add_widget(self.tf_cost)
 
-        btn_smoked = MDFillRoundFlatIconButton(
+        self.btn_smoked = MDFillRoundFlatIconButton(
             text='Smoking One!',
             icon='smoking-pipe',
             on_release=self.db_create,
@@ -90,7 +93,7 @@ class SmokingHistoryApp(MDApp):
             md_bg_color=[1,1,0,1],
             font_size="18sp"
         )
-        self.screen.add_widget(btn_smoked)
+        self.screen.add_widget(self.btn_smoked)
 
         self.lbl_total = MDLabel(
             text='YOUR SMOKING HISTORY SHOWS HERE!',
@@ -114,7 +117,7 @@ class SmokingHistoryApp(MDApp):
         )
         self.screen.add_widget(self.btn_weekly_cost)
 
-        btn_weekly_total = MDRoundFlatIconButton(
+        self.btn_weekly_total = MDRoundFlatIconButton(
             text='Weekly Total',
             icon='calendar-weekend',
             on_release=self.weekly_total_count,
@@ -123,9 +126,9 @@ class SmokingHistoryApp(MDApp):
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_weekly_total)
+        self.screen.add_widget(self.btn_weekly_total)
 
-        btn_monthly_cost = MDRoundFlatIconButton(
+        self.btn_monthly_cost = MDRoundFlatIconButton(
             text='Monthly Spent',
             icon='wallet-outline',
             on_release=self.monthly_spent,
@@ -134,9 +137,9 @@ class SmokingHistoryApp(MDApp):
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_monthly_cost)
+        self.screen.add_widget(self.btn_monthly_cost)
 
-        btn_monthly_total = MDRoundFlatIconButton(
+        self.btn_monthly_total = MDRoundFlatIconButton(
             text='Monthly Total',
             icon='calendar-month-outline',
             on_release=self.monthly_count,
@@ -145,9 +148,9 @@ class SmokingHistoryApp(MDApp):
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_monthly_total)
+        self.screen.add_widget(self.btn_monthly_total)
 
-        btn_total_spent = MDRoundFlatIconButton(
+        self.btn_total_spent = MDRoundFlatIconButton(
             text='Total Spent',
             icon='wallet',
             on_release=self.total_spent,
@@ -156,9 +159,9 @@ class SmokingHistoryApp(MDApp):
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_total_spent)
+        self.screen.add_widget(self.btn_total_spent)
 
-        btn_total = MDRoundFlatIconButton(
+        self.btn_total = MDRoundFlatIconButton(
             text='Total Smoked',
             icon='calendar-check',
             on_release=self.total_count,
@@ -167,7 +170,7 @@ class SmokingHistoryApp(MDApp):
             width=150,
             font_size='16sp'
         )
-        self.screen.add_widget(btn_total)
+        self.screen.add_widget(self.btn_total)
 
         self.table = MDDataTable(
             rows_num = 3,
@@ -184,6 +187,12 @@ class SmokingHistoryApp(MDApp):
         )
 #        self.screen.add_widget(self.table)
 
+        self.lbl_about = MDLabel(
+            text = "It's the Beta/Trial version of Track Dhoom. There is no noble objective except to help myself and my friends with this app!" + "\n\n" + "At the time of smoking, open the app and enter the price of your smoke; press the 'Smoking One' button. That's all! The app will keep a record of your smoking." + "\n\n" + "In this version, you can see some basic and important statistics of your smoking habit. In the upcoming versions, I am coming up with some more interesting and useful statistical models.",
+            pos_hint = {'center_x': 0.5, 'center_y': 0.5},
+            size_hint_x = 0.8
+        )
+
         return self.screen
 
     def on_start(self):
@@ -195,7 +204,7 @@ class SmokingHistoryApp(MDApp):
         for key in self.store.keys():
             if self.store.get(str(key))['date'] == datetime.now().strftime('%d/%m/%Y'):
                 count += 1
-        self.lbl_total.text = "YOU'VE ALREADY SMOKED " + str(count) + ' STICK(S) TODAY'
+        self.lbl_total.text = "YOU'VE ALREADY SMOKED" + "\n" + str(count) + " STICK(S) TODAY"
 
         for key in self.store.keys():
             date = self.store.get(str(key))['date']
@@ -204,29 +213,10 @@ class SmokingHistoryApp(MDApp):
 
             self.table.row_data.insert(len(self.table.row_data), (date, time, cost))
 
-    def faq(self):
-        self.dialog_faq = MDDialog(
-            title = 'Message from The Developer',
-            text = "It's the Beta/Trial version of Track Dhoom. There is no noble objective except to help myself and my friends with this app!" + "\n\n" + "At the time of smoking, open the app and enter the price of your smoke; press the 'Smoking One' button. That's all! The app will keep a record of your smoking." + "\n\n" + "In this version, you can see some basic and important statistics of your smoking habit. In the upcoming versions, I am coming up with some more interesting and useful statistical models.",
-            radius=[40, 7, 40, 7],
-            buttons = [
-                MDFlatButton(
-                    text = 'OK',
-                    theme_text_color = 'Custom',
-                    text_color = self.theme_cls.primary_color,
-                    on_release = self.close_dialog_faq
-                )
-            ]
-        )
-        self.dialog_faq.open()
-
-    def close_dialog_faq(self, args):
-        self.dialog_faq.dismiss()
-
     def db_create(self, args):
         if self.tf_cost.text == '':
             self.dialog = MDDialog(
-                title = 'Warning',
+                title = 'Warning!',
                 text = 'You have to insert cost to record your smoking!',
                 radius = [40, 7, 40, 7],
                 buttons = [
@@ -241,7 +231,7 @@ class SmokingHistoryApp(MDApp):
             self.dialog.open()
         else:
             self.dialog = MDDialog(
-                title = 'Successful',
+                title = 'Successful!',
                 text = 'Your smoking record has been added in the database!',
                 radius = [40, 7, 40, 7],
                 buttons = [
@@ -275,12 +265,26 @@ class SmokingHistoryApp(MDApp):
             for key in self.store.keys():
                 if self.store.get(str(key))['date'] == datetime.now().strftime('%d/%m/%Y'):
                     count += 1
-            self.lbl_total.text = "YOU'VE ALREADY SMOKED " + str(count) + ' STICK(S) TODAY'
+            self.lbl_total.text = "YOU'VE ALREADY SMOKED" + "\n" + str(count) + " STICK(S) TODAY"
             
             self.table.row_data.insert(len(self.table.row_data), (current_date, current_time, cost))
 
     def close_dialog(self, args):
         self.dialog.dismiss()
+
+    def about_page(self, args):
+        self.screen.remove_widget(self.tf_cost)
+        self.screen.remove_widget(self.btn_smoked)
+        self.screen.remove_widget(self.lbl_total)
+        self.screen.remove_widget(self.btn_weekly_total)
+        self.screen.remove_widget(self.btn_weekly_cost)
+        self.screen.remove_widget(self.btn_monthly_total)
+        self.screen.remove_widget(self.btn_monthly_cost)
+        self.screen.remove_widget(self.btn_total)
+        self.screen.remove_widget(self.btn_total_spent)
+        self.screen.remove_widget(self.btn_about)
+
+        self.screen.add_widget(self.lbl_about)
 
     def total_count(self, args):
         self.lbl_total.text = 'OVERALL SMOKING COUNT:' + '\n' + str(len(self.store.keys())) + ' STICK(S)'
