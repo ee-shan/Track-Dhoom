@@ -1,4 +1,5 @@
 from re import S
+from tkinter import font
 import kivy
 kivy.require('2.0.0')
 import kivymd
@@ -14,6 +15,8 @@ from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
 from kivy.core.window import Window
 from kivy.storage.jsonstore import JsonStore
+
+import webbrowser
 
 from datetime import datetime, timedelta
 
@@ -42,9 +45,39 @@ class SmokingHistoryApp(MDApp):
         self.theme_cls.primary_hue = 'A700'
         self.theme_cls.theme_style = 'Dark'
 
+        self.state = 1
+        self.theme_state = 1
+
         self.screen = Screen()
 
-        self.state = 1
+        self.btn_list = MDRectangleFlatIconButton(
+            text = 'History',
+            icon = 'table-eye',
+            font_size = '17sp',
+            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
+            line_color = [0, 0, 0, 0],
+            on_release = self.view_full_list
+        )
+        self.screen.add_widget(self.btn_list)
+
+        self.btn_home = MDRectangleFlatIconButton(
+            text = 'Home',
+            icon = 'home',
+            font_size = '17sp',
+            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
+            line_color = [0, 0, 0, 0],
+            on_release = self.back_to_home
+        )
+
+        self.btn_about = MDRectangleFlatIconButton(
+            text = 'About',
+            icon = 'information-outline',
+            font_size = '17sp',
+            pos_hint = {'center_x': 0.7, 'center_y': 0.05},
+            line_color = [0, 0, 0, 0],
+            on_release = self.about_page
+        )
+        self.screen.add_widget(self.btn_about)
 
         self.toolbar = MDToolbar(title="Track Dhoom!")
         self.toolbar.right_action_items = [['exit-to-app', lambda x: MDApp.get_running_app().stop()]]
@@ -95,7 +128,7 @@ class SmokingHistoryApp(MDApp):
             on_release=self.db_create,
             pos_hint={'center_x': 0.5, 'center_y': 0.75},
             md_bg_color=[1,1,0,1],
-            font_size="18sp"
+            font_size="20sp"
         )
         self.screen.add_widget(self.btn_smoked)
 
@@ -189,7 +222,12 @@ class SmokingHistoryApp(MDApp):
                 ('Cost', dp(30))
             ]
         )
-#        self.screen.add_widget(self.table)
+
+        self.lbl_about = MDLabel(
+            text = "It's the Beta/Trial version of Track Dhoom. There is no noble objective except to help myself and my friends with this app!" + "\n\n" + "At the time of smoking, open the app and enter the price of your smoke; press the 'Smoking One' button. That's all! The app will keep a record of your smoking." + "\n\n" + "In this version, you can see some basic and important statistics of your smoking habit. In the upcoming versions, I am coming up with some more interesting and useful statistical models.",
+            pos_hint = {'center_x': 0.5, 'center_y': 0.5},
+            size_hint_x = 0.8
+        )
 
         self.lbl_about = MDLabel(
             text = "It's the Beta/Trial version of Track Dhoom. There is no noble objective except to help myself and my friends with this app!" + "\n\n" + "At the time of smoking, open the app and enter the price of your smoke; press the 'Smoking One' button. That's all! The app will keep a record of your smoking." + "\n\n" + "In this version, you can see some basic and important statistics of your smoking habit. In the upcoming versions, I am coming up with some more interesting and useful statistical models.",
@@ -207,10 +245,91 @@ class SmokingHistoryApp(MDApp):
 
         return self.screen
 
+    def view_full_list(self, args):
+        if self.state == 3:
+            self.screen.remove_widget(self.btn_github)
+
+        self.state = 2
+
+        self.screen.remove_widget(self.tf_cost)
+        self.screen.remove_widget(self.btn_smoked)
+        self.screen.remove_widget(self.lbl_total)
+        self.screen.remove_widget(self.btn_weekly_total)
+        self.screen.remove_widget(self.btn_monthly_cost)
+        self.screen.remove_widget(self.btn_total_spent)
+        self.screen.remove_widget(self.btn_monthly_total)
+        self.screen.remove_widget(self.btn_total)
+        self.screen.remove_widget(self.btn_weekly_cost)
+        self.screen.remove_widget(self.btn_list)
+        self.screen.remove_widget(self.lbl_about)
+        self.screen.remove_widget(self.btn_about)
+
+        #self.screen.add_widget(self.table)
+        self.screen.add_widget(self.btn_home)
+        self.screen.add_widget(self.btn_about)
+
+    def back_to_home(self, args):
+        if self.state == 3:
+            self.screen.remove_widget(self.btn_github)
+
+        self.state = 1
+
+        self.screen.remove_widget(self.table)
+        self.screen.remove_widget(self.btn_home)
+        self.screen.remove_widget(self.lbl_about)
+        self.screen.remove_widget(self.btn_about)
+
+        self.screen.add_widget(self.tf_cost)
+        self.screen.add_widget(self.btn_smoked)
+        self.screen.add_widget(self.lbl_total)
+        self.screen.add_widget(self.btn_weekly_total)
+        self.screen.add_widget(self.btn_monthly_cost)
+        self.screen.add_widget(self.btn_total_spent)
+        self.screen.add_widget(self.btn_monthly_total)
+        self.screen.add_widget(self.btn_total)
+        self.screen.add_widget(self.btn_weekly_cost)
+        self.screen.add_widget(self.btn_list)
+        self.screen.add_widget(self.btn_about)
+
+    def about_page(self, args):
+        if self.state == 1:
+            self.screen.remove_widget(self.tf_cost)
+            self.screen.remove_widget(self.btn_smoked)
+            self.screen.remove_widget(self.lbl_total)
+            self.screen.remove_widget(self.btn_weekly_total)
+            self.screen.remove_widget(self.btn_monthly_cost)
+            self.screen.remove_widget(self.btn_total_spent)
+            self.screen.remove_widget(self.btn_monthly_total)
+            self.screen.remove_widget(self.btn_total)
+            self.screen.remove_widget(self.btn_weekly_cost)
+            self.screen.remove_widget(self.btn_list)
+
+            self.screen.add_widget(self.btn_home)
+        elif self.state == 2:
+            self.screen.remove_widget(self.table)
+            self.screen.remove_widget(self.btn_home)
+            
+            self.screen.add_widget(self.btn_list)
+
+        self.state = 3
+
+        self.screen.remove_widget(self.btn_about)
+
+        self.btn_github = MDFlatButton(
+            text = 'Open GitHub Repository',
+            font_style = 'H6',
+            theme_text_color='Primary',
+            pos_hint = {'center_x': 0.5, 'center_y': 0.25}
+        )
+        self.btn_github.bind(on_press=lambda x: webbrowser.open('https://github.com/ee-shan/Track-Dhoom'))
+
+        self.screen.add_widget(self.btn_github)
+        self.screen.add_widget(self.lbl_about)
+
     def on_start(self):
         request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE]) ### DEPLOYMENT MANDATE
         self.store = JsonStore(f"{path}/db_trackdhoom.json") ### DEPLOYMENT MANDATE
-#        self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
+        #self.store = JsonStore('db_trackdhoom.json') ### TESTING ON PC
 
         count = 0
         for key in self.store.keys():
@@ -421,6 +540,26 @@ class SmokingHistoryApp(MDApp):
                 count += 1
 
         self.lbl_total.text = 'WEEKLY SMOKING COUNT:' + '\n' + str(count) + ' STICK(S)'
+
+    def weekly_spent(self, args):
+        prev_dt = datetime.now() - timedelta(days = 7)
+        prev_y = int(prev_dt.strftime('%Y'))
+        prev_m = int(prev_dt.strftime('%m'))
+        prev_d = int(prev_dt.strftime('%d'))
+        prev = datetime(prev_y, prev_m, prev_d)
+
+        cost = 0
+        for key in self.store.keys():
+            temp_dt = self.store.get(str(key))['date']
+            temp_y = int(temp_dt[6:])
+            temp_m = int(temp_dt[3:5])
+            temp_d = int(temp_dt[0:2])
+            temp = datetime(temp_y, temp_m, temp_d)
+
+            if temp > prev:
+                cost += int(self.store.get(str(key))['cost'])
+
+        self.lbl_total.text = 'WEEKLY SMOKING COST:' + '\n' + str(cost) + ' BDT'
 
     def monthly_count(self, args):
         count = 0
