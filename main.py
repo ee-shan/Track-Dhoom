@@ -96,6 +96,7 @@ class SmokingHistoryApp(MDApp):
             text='YOUR SMOKING HISTORY SHOWS HERE!',
             halign='center',
             pos_hint={'center_x': 0.5, 'center_y': 0.6},
+            size_hint_x=0.8,
             theme_text_color='Custom',
             text_color=(1,1,0,1),
             font_style='H5'
@@ -105,6 +106,7 @@ class SmokingHistoryApp(MDApp):
         self.btn_weekly_cost = MDRoundFlatIconButton(
             text = 'Weekly Spent',
             icon = 'wallet',
+            on_release = self.weekly_spent,
             pos_hint = {'center_x': 0.3, 'center_y': 0.4},
             size_hint_x = None,
             width = 150,
@@ -281,13 +283,33 @@ class SmokingHistoryApp(MDApp):
         self.dialog.dismiss()
 
     def total_count(self, args):
-        self.lbl_total.text = 'OVERALL SMOKING COUNT: ' + str(len(self.store.keys())) + ' STICK(S)'
+        self.lbl_total.text = 'OVERALL SMOKING COUNT:' + '\n' + str(len(self.store.keys())) + ' STICK(S)'
 
     def total_spent(self, args):
         cost = 0
         for key in self.store.keys():
             cost += int(self.store.get(str(key))['cost'])
-        self.lbl_total.text = 'OVERALL SMOKING COST: ' + str(cost) + ' BDT'
+        self.lbl_total.text = 'OVERALL SMOKING COST:' + '\n' + str(cost) + ' BDT'
+
+    def weekly_spent(self, args):
+        prev_dt = datetime.now() - timedelta(days = 7)
+        prev_y = int(prev_dt.strftime('%Y'))
+        prev_m = int(prev_dt.strftime('%m'))
+        prev_d = int(prev_dt.strftime('%d'))
+        prev = datetime(prev_y, prev_m, prev_d)
+
+        cost = 0
+        for key in self.store.keys():
+            temp_dt = self.store.get(str(key))['date']
+            temp_y = int(temp_dt[6:])
+            temp_m = int(temp_dt[3:5])
+            temp_d = int(temp_dt[0:2])
+            temp = datetime(temp_y, temp_m, temp_d)
+
+            if temp > prev:
+                cost += int(self.store.get(str(key))['cost'])
+
+        self.lbl_total.text = 'WEEKLY SMOKING COST:' + '\n' + str(cost) + ' BDT'
 
     def weekly_total_count(self, args):
         prev_dt = datetime.now() - timedelta(days = 7)
@@ -307,21 +329,21 @@ class SmokingHistoryApp(MDApp):
             if temp > prev:
                 count += 1
 
-        self.lbl_total.text = 'WEEKLY SMOKING COUNT: ' + str(count) + ' STICK(S)'
+        self.lbl_total.text = 'WEEKLY SMOKING COUNT:' + '\n' + str(count) + ' STICK(S)'
 
     def monthly_count(self, args):
         count = 0
         for key in self.store.keys():
             if self.store.get(str(key))['date'][3:] == datetime.now().strftime('%m/%Y'):
                 count += 1
-        self.lbl_total.text = 'MONTHLY SMOKING COUNT: ' + str(count) + ' STICK(S)'
+        self.lbl_total.text = 'MONTHLY SMOKING COUNT:' + '\n' + str(count) + ' STICK(S)'
 
     def monthly_spent(self, args):
         cost = 0
         for key in self.store.keys():
             if self.store.get(str(key))['date'][3:] == datetime.now().strftime('%m/%Y'):
                 cost += int(self.store.get(str(key))['cost'])
-        self.lbl_total.text = 'MONTHLY SMOKING COST: ' + str(cost) + ' BDT'
+        self.lbl_total.text = 'MONTHLY SMOKING COST:' + '\n' + str(cost) + ' BDT'
 
 if __name__ == '__main__':
     SmokingHistoryApp().run()
