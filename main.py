@@ -52,6 +52,7 @@ class SmokingHistoryApp(MDApp):
         self.btn_list = MDRectangleFlatIconButton(
             text = 'History',
             icon = 'table-eye',
+            on_release = self.history_page,
             font_size = '17sp',
             pos_hint = {'center_x': 0.3, 'center_y': 0.05},
             line_color = [0, 0, 0, 0]
@@ -61,6 +62,7 @@ class SmokingHistoryApp(MDApp):
         self.btn_home = MDRectangleFlatIconButton(
             text = 'Home',
             icon = 'home',
+            on_release = self.home_page,
             font_size = '17sp',
             pos_hint = {'center_x': 0.3, 'center_y': 0.05},
             line_color = [0, 0, 0, 0],
@@ -272,17 +274,86 @@ class SmokingHistoryApp(MDApp):
     def close_dialog(self, args):
         self.dialog.dismiss()
 
+    def home_page(self, args):
+        # redirected from about page
+        if self.state == 3:
+            self.state = 1
+
+            self.screen.remove_widget(self.lbl_about)
+            self.screen.remove_widget(self.btn_home)
+
+            
+        # redirected from history page
+        elif self.state == 2:
+            self.state = 1
+
+            self.screen.remove_widget(self.btn_home)
+            self.screen.remove_widget(self.btn_about)
+        
+        self.screen.add_widget(self.tf_cost)
+        self.screen.add_widget(self.btn_smoked)
+        self.screen.add_widget(self.lbl_total)
+        self.screen.add_widget(self.btn_weekly_total)
+        self.screen.add_widget(self.btn_weekly_cost)
+        self.screen.add_widget(self.btn_monthly_total)
+        self.screen.add_widget(self.btn_monthly_cost)
+        self.screen.add_widget(self.btn_total)
+        self.screen.add_widget(self.btn_total_spent)
+        self.screen.add_widget(self.btn_list)
+        self.screen.add_widget(self.btn_about)
+
+    def history_page(self, args):
+        # redirected from home page
+        if self.state == 1:
+            self.state = 2
+
+            self.screen.remove_widget(self.tf_cost)
+            self.screen.remove_widget(self.btn_smoked)
+            self.screen.remove_widget(self.lbl_total)
+            self.screen.remove_widget(self.btn_weekly_total)
+            self.screen.remove_widget(self.btn_weekly_cost)
+            self.screen.remove_widget(self.btn_monthly_total)
+            self.screen.remove_widget(self.btn_monthly_cost)
+            self.screen.remove_widget(self.btn_total)
+            self.screen.remove_widget(self.btn_total_spent)
+            self.screen.remove_widget(self.btn_list)
+            self.screen.remove_widget(self.btn_about)
+        # redirected from about page
+        elif self.state == 3:
+            self.state = 2
+
+            self.screen.remove_widget(self.lbl_about)
+            self.screen.remove_widget(self.btn_list)
+
+        self.screen.add_widget(self.btn_home)
+        self.screen.add_widget(self.btn_about)
+
     def about_page(self, args):
-        self.screen.remove_widget(self.tf_cost)
-        self.screen.remove_widget(self.btn_smoked)
-        self.screen.remove_widget(self.lbl_total)
-        self.screen.remove_widget(self.btn_weekly_total)
-        self.screen.remove_widget(self.btn_weekly_cost)
-        self.screen.remove_widget(self.btn_monthly_total)
-        self.screen.remove_widget(self.btn_monthly_cost)
-        self.screen.remove_widget(self.btn_total)
-        self.screen.remove_widget(self.btn_total_spent)
-        self.screen.remove_widget(self.btn_about)
+        # redirected from home page
+        if self.state == 1:
+            self.state = 3
+
+            self.screen.remove_widget(self.tf_cost)
+            self.screen.remove_widget(self.btn_smoked)
+            self.screen.remove_widget(self.lbl_total)
+            self.screen.remove_widget(self.btn_weekly_total)
+            self.screen.remove_widget(self.btn_weekly_cost)
+            self.screen.remove_widget(self.btn_monthly_total)
+            self.screen.remove_widget(self.btn_monthly_cost)
+            self.screen.remove_widget(self.btn_total)
+            self.screen.remove_widget(self.btn_total_spent)
+            self.screen.remove_widget(self.btn_list)
+            self.screen.remove_widget(self.btn_about)
+
+            self.screen.add_widget(self.btn_home)
+        # redirected from history page
+        elif self.state == 2:
+            self.state = 3
+
+            self.screen.remove_widget(self.btn_home)
+            self.screen.remove_widget(self.btn_about)
+
+            self.screen.add_widget(self.btn_list)
 
         self.screen.add_widget(self.lbl_about)
 
