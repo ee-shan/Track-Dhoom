@@ -244,7 +244,7 @@ class SmokingHistoryApp(MDApp):
         self.screen.remove_widget(self.lbl_about)
         self.screen.remove_widget(self.btn_about)
 
-        self.screen.add_widget(self.table)
+        #self.screen.add_widget(self.table)
         self.screen.add_widget(self.btn_home)
         self.screen.add_widget(self.btn_about)
 
