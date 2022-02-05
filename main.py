@@ -46,38 +46,8 @@ class SmokingHistoryApp(MDApp):
         self.theme_cls.theme_style = 'Dark'
 
         self.state = 1
-        self.theme_state = 1
 
         self.screen = Screen()
-
-        self.btn_list = MDRectangleFlatIconButton(
-            text = 'History',
-            icon = 'table-eye',
-            font_size = '17sp',
-            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
-            line_color = [0, 0, 0, 0],
-            on_release = self.view_full_list
-        )
-        self.screen.add_widget(self.btn_list)
-
-        self.btn_home = MDRectangleFlatIconButton(
-            text = 'Home',
-            icon = 'home',
-            font_size = '17sp',
-            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
-            line_color = [0, 0, 0, 0],
-            on_release = self.back_to_home
-        )
-
-        self.btn_about = MDRectangleFlatIconButton(
-            text = 'About',
-            icon = 'information-outline',
-            font_size = '17sp',
-            pos_hint = {'center_x': 0.7, 'center_y': 0.05},
-            line_color = [0, 0, 0, 0],
-            on_release = self.about_page
-        )
-        self.screen.add_widget(self.btn_about)
 
         self.toolbar = MDToolbar(title="Track Dhoom!")
         self.toolbar.right_action_items = [['exit-to-app', lambda x: MDApp.get_running_app().stop()]]
@@ -147,10 +117,10 @@ class SmokingHistoryApp(MDApp):
             text = 'Weekly Spent',
             icon = 'wallet',
             on_release = self.weekly_spent,
-            pos_hint = {'center_x': 0.3, 'center_y': 0.4},
+            pos_hint = {'center_x': 0.28, 'center_y': 0.4},
             size_hint_x = None,
             width = 150,
-            font_size = '16sp'
+            font_size = '15sp'
         )
         self.screen.add_widget(self.btn_weekly_cost)
 
@@ -158,10 +128,10 @@ class SmokingHistoryApp(MDApp):
             text='Weekly Total',
             icon='calendar-weekend',
             on_release=self.weekly_total_count,
-            pos_hint={'center_x': 0.7, 'center_y': 0.4},
+            pos_hint={'center_x': 0.72, 'center_y': 0.4},
             size_hint_x=None,
             width=150,
-            font_size='16sp'
+            font_size='15sp'
         )
         self.screen.add_widget(self.btn_weekly_total)
 
@@ -169,10 +139,10 @@ class SmokingHistoryApp(MDApp):
             text='Monthly Spent',
             icon='wallet-outline',
             on_release=self.monthly_spent,
-            pos_hint={'center_x': 0.3, 'center_y': 0.34},
+            pos_hint={'center_x': 0.28, 'center_y': 0.34},
             size_hint_x=None,
             width=150,
-            font_size='16sp'
+            font_size='15sp'
         )
         self.screen.add_widget(self.btn_monthly_cost)
 
@@ -180,10 +150,10 @@ class SmokingHistoryApp(MDApp):
             text='Monthly Total',
             icon='calendar-month-outline',
             on_release=self.monthly_count,
-            pos_hint={'center_x': 0.7, 'center_y': 0.34},
+            pos_hint={'center_x': 0.72, 'center_y': 0.34},
             size_hint_x=None,
             width=150,
-            font_size='16sp'
+            font_size='15sp'
         )
         self.screen.add_widget(self.btn_monthly_total)
 
@@ -191,10 +161,10 @@ class SmokingHistoryApp(MDApp):
             text='Total Spent',
             icon='wallet',
             on_release=self.total_spent,
-            pos_hint={'center_x': 0.3, 'center_y': 0.28},
+            pos_hint={'center_x': 0.28, 'center_y': 0.28},
             size_hint_x=None,
             width=150,
-            font_size='16sp'
+            font_size='15sp'
         )
         self.screen.add_widget(self.btn_total_spent)
 
@@ -202,10 +172,10 @@ class SmokingHistoryApp(MDApp):
             text='Total Smoked',
             icon='calendar-check',
             on_release=self.total_count,
-            pos_hint={'center_x': 0.7, 'center_y': 0.28},
+            pos_hint={'center_x': 0.72, 'center_y': 0.28},
             size_hint_x=None,
             width=150,
-            font_size='16sp'
+            font_size='15sp'
         )
         self.screen.add_widget(self.btn_total)
 
@@ -235,6 +205,13 @@ class SmokingHistoryApp(MDApp):
             size_hint_x = 0.8
         )
 
+        self.lbl_title = MDLabel(
+            text = 'Track Dhoom!',
+            font_style = 'H4',
+            halign = 'center',
+            pos_hint = {'center_x': 0.5, 'center_y': 0.75}
+        )
+
         self.btn_github = MDFlatButton(
             text = 'Open GitHub Repository',
             font_style = 'H6',
@@ -243,88 +220,16 @@ class SmokingHistoryApp(MDApp):
         )
         self.btn_github.bind(on_press=lambda x: webbrowser.open('https://github.com/ee-shan/Track-Dhoom'))
 
-        return self.screen
-
-    def view_full_list(self, args):
-        if self.state == 3:
-            self.screen.remove_widget(self.btn_github)
-
-        self.state = 2
-
-        self.screen.remove_widget(self.tf_cost)
-        self.screen.remove_widget(self.btn_smoked)
-        self.screen.remove_widget(self.lbl_total)
-        self.screen.remove_widget(self.btn_weekly_total)
-        self.screen.remove_widget(self.btn_monthly_cost)
-        self.screen.remove_widget(self.btn_total_spent)
-        self.screen.remove_widget(self.btn_monthly_total)
-        self.screen.remove_widget(self.btn_total)
-        self.screen.remove_widget(self.btn_weekly_cost)
-        self.screen.remove_widget(self.btn_list)
-        self.screen.remove_widget(self.lbl_about)
-        self.screen.remove_widget(self.btn_about)
-
-        #self.screen.add_widget(self.table)
-        self.screen.add_widget(self.btn_home)
-        self.screen.add_widget(self.btn_about)
-
-    def back_to_home(self, args):
-        if self.state == 3:
-            self.screen.remove_widget(self.btn_github)
-
-        self.state = 1
-
-        self.screen.remove_widget(self.table)
-        self.screen.remove_widget(self.btn_home)
-        self.screen.remove_widget(self.lbl_about)
-        self.screen.remove_widget(self.btn_about)
-
-        self.screen.add_widget(self.tf_cost)
-        self.screen.add_widget(self.btn_smoked)
-        self.screen.add_widget(self.lbl_total)
-        self.screen.add_widget(self.btn_weekly_total)
-        self.screen.add_widget(self.btn_monthly_cost)
-        self.screen.add_widget(self.btn_total_spent)
-        self.screen.add_widget(self.btn_monthly_total)
-        self.screen.add_widget(self.btn_total)
-        self.screen.add_widget(self.btn_weekly_cost)
-        self.screen.add_widget(self.btn_list)
-        self.screen.add_widget(self.btn_about)
-
-    def about_page(self, args):
-        if self.state == 1:
-            self.screen.remove_widget(self.tf_cost)
-            self.screen.remove_widget(self.btn_smoked)
-            self.screen.remove_widget(self.lbl_total)
-            self.screen.remove_widget(self.btn_weekly_total)
-            self.screen.remove_widget(self.btn_monthly_cost)
-            self.screen.remove_widget(self.btn_total_spent)
-            self.screen.remove_widget(self.btn_monthly_total)
-            self.screen.remove_widget(self.btn_total)
-            self.screen.remove_widget(self.btn_weekly_cost)
-            self.screen.remove_widget(self.btn_list)
-
-            self.screen.add_widget(self.btn_home)
-        elif self.state == 2:
-            self.screen.remove_widget(self.table)
-            self.screen.remove_widget(self.btn_home)
-            
-            self.screen.add_widget(self.btn_list)
-
-        self.state = 3
-
-        self.screen.remove_widget(self.btn_about)
-
-        self.btn_github = MDFlatButton(
-            text = 'Open GitHub Repository',
-            font_style = 'H6',
-            theme_text_color='Primary',
-            pos_hint = {'center_x': 0.5, 'center_y': 0.25}
+        self.btn_form = MDFlatButton(
+            text = 'Subscribe to Get Future App Updates',
+            font_style = 'Subtitle1',
+            theme_text_color='Custom',
+            text_color=(1,1,0,1),
+            pos_hint = {'center_x': 0.5, 'center_y': 0.18}
         )
-        self.btn_github.bind(on_press=lambda x: webbrowser.open('https://github.com/ee-shan/Track-Dhoom'))
+        self.btn_form.bind(on_press=lambda x: webbrowser.open('https://forms.gle/RjhqzNgC9GEEhSzz8'))
 
-        self.screen.add_widget(self.btn_github)
-        self.screen.add_widget(self.lbl_about)
+        return self.screen
 
     def on_start(self):
         request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE]) ### DEPLOYMENT MANDATE
@@ -408,8 +313,10 @@ class SmokingHistoryApp(MDApp):
         if self.state == 3:
             self.state = 1
 
+            self.screen.remove_widget(self.lbl_title) # remove app title
             self.screen.remove_widget(self.lbl_about)
             self.screen.remove_widget(self.btn_github) # remove github link
+            self.screen.remove_widget(self.btn_form) # remove form link
             self.screen.remove_widget(self.btn_home)
 
             
@@ -453,8 +360,10 @@ class SmokingHistoryApp(MDApp):
         elif self.state == 3:
             self.state = 2
 
+            self.screen.remove_widget(self.lbl_title) # remove app title
             self.screen.remove_widget(self.lbl_about)
             self.screen.remove_widget(self.btn_github) # remove github link
+            self.screen.remove_widget(self.btn_form) # remove form link
             self.screen.remove_widget(self.btn_list)
 
         self.screen.add_widget(self.table) # show table
@@ -489,8 +398,10 @@ class SmokingHistoryApp(MDApp):
 
             self.screen.add_widget(self.btn_list)
 
+        self.screen.add_widget(self.lbl_title) # app title
         self.screen.add_widget(self.lbl_about)
         self.screen.add_widget(self.btn_github) # github link
+        self.screen.add_widget(self.btn_form) # form link
 
     def total_count(self, args):
         self.lbl_total.text = 'OVERALL SMOKING COUNT:' + '\n' + str(len(self.store.keys())) + ' STICK(S)'
