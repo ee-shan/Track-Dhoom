@@ -95,10 +95,10 @@ class SmokingHistoryApp(MDApp):
         self.lbl_total = MDLabel(
             text='YOUR SMOKING HISTORY SHOWS HERE!',
             halign='center',
-            pos_hint={'center_y': 0.67},
+            pos_hint={'center_x': 0.5, 'center_y': 0.6},
             theme_text_color='Custom',
             text_color=(1,1,0,1),
-            font_style='H6'
+            font_style='H5'
         )
         self.screen.add_widget(self.lbl_total)
 
