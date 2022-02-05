@@ -8,7 +8,7 @@ from kivymd.uix.screen import Screen
 from kivymd.uix.toolbar import MDToolbar
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
-from kivymd.uix.button import MDRoundFlatButton, MDRoundFlatIconButton, MDFlatButton, MDFillRoundFlatIconButton
+from kivymd.uix.button import MDRoundFlatButton, MDRoundFlatIconButton, MDFlatButton, MDFillRoundFlatIconButton, MDRectangleFlatIconButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.datatables import MDDataTable
 from kivy.metrics import dp
@@ -43,9 +43,35 @@ class SmokingHistoryApp(MDApp):
         self.screen = Screen()
 
         self.toolbar = MDToolbar(title="Track Dhoom!")
-        self.toolbar.right_action_items = [['information-outline', lambda x: self.faq()]]
+        self.toolbar.right_action_items = [['exit-to-app', lambda x: MDApp.get_running_app().stop()]]
         self.toolbar.pos_hint = {"top": 1}
         self.screen.add_widget(self.toolbar)
+
+        self.btn_list = MDRectangleFlatIconButton(
+            text = 'History',
+            icon = 'table-eye',
+            font_size = '17sp',
+            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
+            line_color = [0, 0, 0, 0]
+        )
+        self.screen.add_widget(self.btn_list)
+
+        self.btn_home = MDRectangleFlatIconButton(
+            text = 'Home',
+            icon = 'home',
+            font_size = '17sp',
+            pos_hint = {'center_x': 0.3, 'center_y': 0.05},
+            line_color = [0, 0, 0, 0],
+        )
+
+        self.btn_about = MDRectangleFlatIconButton(
+            text = 'About',
+            icon = 'information-outline',
+            font_size = '17sp',
+            pos_hint = {'center_x': 0.7, 'center_y': 0.05},
+            line_color = [0, 0, 0, 0]
+        )
+        self.screen.add_widget(self.btn_about)
 
         self.tf_cost = MDTextField(
             pos_hint = {'center_x': 0.5, 'center_y': 0.85},
@@ -76,67 +102,70 @@ class SmokingHistoryApp(MDApp):
         )
         self.screen.add_widget(self.lbl_total)
 
-        btn_weekly_total = MDRoundFlatButton(
+        self.btn_weekly_cost = MDRoundFlatIconButton(
+            text = 'Weekly Spent',
+            icon = 'wallet',
+            pos_hint = {'center_x': 0.3, 'center_y': 0.4},
+            size_hint_x = None,
+            width = 150,
+            font_size = '16sp'
+        )
+        self.screen.add_widget(self.btn_weekly_cost)
+
+        btn_weekly_total = MDRoundFlatIconButton(
             text='Weekly Total',
+            icon='calendar-weekend',
             on_release=self.weekly_total_count,
-            pos_hint={'center_x': 0.3, 'center_y': 0.57},
+            pos_hint={'center_x': 0.7, 'center_y': 0.4},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
         self.screen.add_widget(btn_weekly_total)
 
-        btn_monthly_cost = MDRoundFlatButton(
+        btn_monthly_cost = MDRoundFlatIconButton(
             text='Monthly Spent',
+            icon='wallet-outline',
             on_release=self.monthly_spent,
-            pos_hint={'center_x': 0.7, 'center_y': 0.57},
+            pos_hint={'center_x': 0.3, 'center_y': 0.34},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
         self.screen.add_widget(btn_monthly_cost)
 
-        btn_total_spent = MDRoundFlatButton(
-            text='Total Spent',
-            on_release=self.total_spent,
-            pos_hint={'center_x': 0.3, 'center_y': 0.51},
-            size_hint_x=None,
-            width=150,
-            font_size='16sp'
-        )
-        self.screen.add_widget(btn_total_spent)
-
-        btn_monthly_total = MDRoundFlatButton(
+        btn_monthly_total = MDRoundFlatIconButton(
             text='Monthly Total',
+            icon='calendar-month-outline',
             on_release=self.monthly_count,
-            pos_hint={'center_x': 0.7, 'center_y': 0.51},
+            pos_hint={'center_x': 0.7, 'center_y': 0.34},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
         self.screen.add_widget(btn_monthly_total)
 
-        btn_total = MDRoundFlatButton(
+        btn_total_spent = MDRoundFlatIconButton(
+            text='Total Spent',
+            icon='wallet',
+            on_release=self.total_spent,
+            pos_hint={'center_x': 0.3, 'center_y': 0.28},
+            size_hint_x=None,
+            width=150,
+            font_size='16sp'
+        )
+        self.screen.add_widget(btn_total_spent)
+
+        btn_total = MDRoundFlatIconButton(
             text='Total Smoked',
+            icon='calendar-check',
             on_release=self.total_count,
-            pos_hint={'center_x': 0.3, 'center_y': 0.45},
+            pos_hint={'center_x': 0.7, 'center_y': 0.28},
             size_hint_x=None,
             width=150,
             font_size='16sp'
         )
         self.screen.add_widget(btn_total)
-
-        btn_exit = MDFillRoundFlatIconButton(
-            text='Exit App',
-            icon='close-circle-outline',
-            on_release=self.close_app,
-            pos_hint={'center_x': 0.7, 'center_y': 0.45},
-            md_bg_color=[1,1,0,1],
-            size_hint_x=None,
-            width=150,
-            font_size='16sp'
-        )
-        self.screen.add_widget(btn_exit)
 
         self.table = MDDataTable(
             rows_num = 3,
@@ -151,7 +180,7 @@ class SmokingHistoryApp(MDApp):
                 ('Cost', dp(30))
             ]
         )
-        self.screen.add_widget(self.table)
+#        self.screen.add_widget(self.table)
 
         return self.screen
 
@@ -191,9 +220,6 @@ class SmokingHistoryApp(MDApp):
 
     def close_dialog_faq(self, args):
         self.dialog_faq.dismiss()
-
-    def close_app(self, args):
-        MDApp.get_running_app().stop()
 
     def db_create(self, args):
         if self.tf_cost.text == '':
