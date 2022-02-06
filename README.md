@@ -7,4 +7,4 @@ Keeping track of one's smoking habit can be helpful in both financial and health
 # Use of Track Dhoom
 With the simplest possible (as well as practically feasible) user interface, it can easily be a part of one's smoking habit. At the time of smoking, the smoker can open the app and make a click! That's all to do to keep record of user's smoking history. The rest will be done by app!
 
-### Statutory Warning: SMOKING IS INJURIOUS TO HEALTH
+###### Statutory Warning: SMOKING IS INJURIOUS TO HEALTH.
