@@ -242,10 +242,10 @@ class SmokingHistoryApp(MDApp):
             self.table.row_data.insert(len(self.table.row_data), (date, time, cost))
 
     def db_create(self, args):
-        if self.tf_cost.text == '':
+        if self.tf_cost.text == '' or self.tf_cost.text.replace('.', '', 1).isdigit() == False:
             self.dialog = MDDialog(
                 title = 'Warning!',
-                text = 'You have to insert cost to record your smoking!',
+                text = 'You have to insert a valid cost of your smoke!',
                 radius = [40, 7, 40, 7],
                 buttons = [
                     MDFlatButton(
@@ -275,7 +275,8 @@ class SmokingHistoryApp(MDApp):
 
             current_date = datetime.now().strftime('%d/%m/%Y')
             current_time = datetime.now().strftime('%H:%M:%S')
-            cost = int(self.tf_cost.text)
+            
+            cost = float(self.tf_cost.text)
 
             if self.store.keys():
                 idx = str(int(self.store.keys()[-1]) + 1)
@@ -401,8 +402,8 @@ class SmokingHistoryApp(MDApp):
     def total_spent(self, args):
         cost = 0
         for key in self.store.keys():
-            cost += int(self.store.get(str(key))['cost'])
-        self.lbl_total.text = 'OVERALL SMOKING COST:' + '\n' + str(cost) + ' BDT'
+            cost += float(self.store.get(str(key))['cost'])
+        self.lbl_total.text = 'OVERALL SMOKING COST:' + '\n' + str(round(cost, 2)) + ' BDT'
 
     def weekly_spent(self, args):
         prev_dt = datetime.now() - timedelta(days = 7)
@@ -420,9 +421,9 @@ class SmokingHistoryApp(MDApp):
             temp = datetime(temp_y, temp_m, temp_d)
 
             if temp > prev:
-                cost += int(self.store.get(str(key))['cost'])
+                cost += float(self.store.get(str(key))['cost'])
 
-        self.lbl_total.text = 'WEEKLY SMOKING COST:' + '\n' + str(cost) + ' BDT'
+        self.lbl_total.text = 'WEEKLY SMOKING COST:' + '\n' + str(round(cost, 2)) + ' BDT'
 
     def weekly_total_count(self, args):
         prev_dt = datetime.now() - timedelta(days = 7)
@@ -455,8 +456,8 @@ class SmokingHistoryApp(MDApp):
         cost = 0
         for key in self.store.keys():
             if self.store.get(str(key))['date'][3:] == datetime.now().strftime('%m/%Y'):
-                cost += int(self.store.get(str(key))['cost'])
-        self.lbl_total.text = 'MONTHLY SMOKING COST:' + '\n' + str(cost) + ' BDT'
+                cost += float(self.store.get(str(key))['cost'])
+        self.lbl_total.text = 'MONTHLY SMOKING COST:' + '\n' + str(round(cost, 2)) + ' BDT'
 
 if __name__ == '__main__':
     SmokingHistoryApp().run()
